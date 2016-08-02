@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>MapReduce_Examples</groupId>
+  <artifactId>Sortingexample</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>Sortingexample</name>
+  <url>http://maven.apache.org</url>
+
+ <properties>
+   <hdp.version>2.7.1.2.3.0.0-2557</hdp.version>
+   <jdk.version>1.8</jdk.version>
+  </properties>
+  
+<repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
+      </snapshots>
+      <id>HDPReleases</id>
+      <name>HDP Releases</name>
+      <url>http://repo.hortonworks.com/content/repositories/releases/</url>
+      <layout>default</layout>
+    </repository>
+    <repository>
+      <id>public.repo.hortonworks.com</id>
+      <name>Public Hortonworks Maven Repo</name>
+      <url>http://repo.hortonworks.com/content/groups/public/</url>
+      <snapshots>
+         <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+    <groupId>org.apache.mrunit</groupId>
+    <artifactId>mrunit</artifactId>
+    <version>1.1.0</version>
+    <classifier>hadoop2</classifier>
+</dependency>
+    <dependency>
+       <groupId>org.apache.hadoop</groupId>
+       <artifactId>hadoop-hdfs</artifactId>
+       <version>${hdp.version}</version>
+    </dependency>
+	<dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-common</artifactId>
+                <version>${hdp.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-mapreduce-client-core</artifactId>
+                <version>${hdp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-mapreduce-client-common</artifactId>
+                <version>${hdp.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-yarn-common</artifactId>
+                <version>${hdp.version}</version>
+            </dependency>
+           <dependency>
+           	<groupId>org.apache.hadoop</groupId>
+           	<artifactId>hadoop-yarn-client</artifactId>
+           	<version>${hdp.version}</version>
+           </dependency>
+
+	<dependency>
+		<groupId>org.apache.hadoop</groupId>
+		<artifactId>hadoop-yarn-api</artifactId>
+		<version>${hdp.version}</version>
+	</dependency>
+  </dependencies>
+
+</project>
