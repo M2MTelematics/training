@@ -1,0 +1,14 @@
+n2.sources = s1
+n2.channels = c1
+n2.sinks = k1
+
+n2.sources.s1.type = spooldir
+n2.sources.s1.spoolDir = /root/flume_tst/spoollog
+
+
+n2.channels.c1.type = memory
+n2.sources.s1.channels = c1
+
+n2.sinks.k1.type = logger
+
+n2.sinks.k1.channel = c1
