@@ -44,8 +44,8 @@ public class BooksxmlInput extends TextInputFormat {
 	    private final DataOutputBuffer buffer = new DataOutputBuffer();
 	    
 	    public XmlRecordReader(FileSplit split, JobConf jobConf) throws IOException {
-	      startTag = jobConf.get(START_TAG_KEY).getBytes("utf-8");
-	      endTag = jobConf.get(END_TAG_KEY).getBytes("utf-8");
+	      startTag = START_TAG_KEY.getBytes();
+	      endTag = END_TAG_KEY.getBytes();
 	      
 	      // open the file and seek to the start of the split
 	      start = split.getStart();

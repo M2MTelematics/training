@@ -52,7 +52,8 @@ public class ReadBookXml extends AbstractSerDe{
 		Text rowText = (Text) record;
 		Object value = null;
 		
-		InputSource source = new InputSource(new StringReader(rowText.toString().replaceAll("<catalog>", "")+"</book>"));
+		//InputSource source = new InputSource(new StringReader(rowText.toString().replaceAll("<catalog>", "")+"</book>"));
+		InputSource source = new InputSource(rowText.toString());
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Object book;
 		
