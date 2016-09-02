@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.serde.serdeConstants;
 import org.apache.hadoop.hive.serde2.AbstractSerDe;
@@ -24,13 +22,16 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfoUtils;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.xml.sax.InputSource;
-
 public class ReadBookXml extends AbstractSerDe{
 
 	private List<String> colNames;
 	private StructTypeInfo rowTypeInfo;
 	private ObjectInspector rowOI;
     private List<Object> row = new ArrayList<Object>();
+    private XPathFactory xpathFactory = XPathFactory.newInstance();
+	private XPath xpath = xpathFactory.newXPath();
+	private String bookid_expr = null;
+    
 
 	
 
@@ -40,6 +41,7 @@ public class ReadBookXml extends AbstractSerDe{
 		String colNamesStr = tableProperties.getProperty(serdeConstants.LIST_COLUMNS);
 		colNames = Arrays.asList(colNamesStr.split(","));
 		String colTypesStr = tableProperties.getProperty(serdeConstants.LIST_COLUMN_TYPES);
+		bookid_expr = tableProperties.getProperty("column.xpath.book_id");
 		List<TypeInfo> colTypes = TypeInfoUtils.getTypeInfosFromTypeString(colTypesStr);
 		rowTypeInfo = (StructTypeInfo) TypeInfoFactory.getStructTypeInfo(colNames, colTypes);
 		rowOI =TypeInfoUtils.getStandardJavaObjectInspectorFromTypeInfo(rowTypeInfo);
@@ -49,29 +51,32 @@ public class ReadBookXml extends AbstractSerDe{
 	public Object deserialize(Writable record) throws SerDeException {
 		// TODO Auto-generated method stub
 		
+		row.clear();
 		Text rowText = (Text) record;
 		Object value = null;
-		
-		//InputSource source = new InputSource(new StringReader(rowText.toString().replaceAll("<catalog>", "")+"</book>"));
-		InputSource source = new InputSource(rowText.toString());
-		XPath xpath = XPathFactory.newInstance().newXPath();
-		Object book;
-		
-		try {
-			book = xpath.evaluate("/book", source, XPathConstants.NODE);
-			
+				 
+		InputSource source = new InputSource(new StringReader(rowText.toString()));
+		   try {
 			for(String fieldName: rowTypeInfo.getAllStructFieldNames())
 			{
+				String expression;
+				source = new InputSource(new StringReader(rowText.toString()));
 			//TypeInfo fieldTypeInfo = rowTypeInfo.getStructFieldTypeInfo(fieldName);
-			value = xpath.evaluate(fieldName, book);
-			row.add(value);
+				if(fieldName.equals("book_id")) {
+					expression = bookid_expr;
+				}
+				else  {
+					expression = "/book/"+fieldName; 
+					}
+					value = (String) xpath.evaluate(expression, source,XPathConstants.STRING);
+					row.add(value);
+					
 			}
-
-		} catch (XPathExpressionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
+				} catch (XPathExpressionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+								
 		return row;
 				
 	}
